@@ -55,7 +55,7 @@ size_t curlWriteFunc(void *ptr, size_t size, size_t nmemb, FILE *stream) {
 int downloadFile(const string& url, const string& path) {
     CURL *curl = curl_easy_init();
     if(curl) {
-        FILE *ofile = fopen(path.c_str(), "w");
+        FILE *ofile = fopen(path.c_str(), "wb");
         curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, ofile);
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlWriteFunc);
