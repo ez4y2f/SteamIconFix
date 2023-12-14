@@ -1,6 +1,6 @@
 #include <iostream>
+#include <winsock2.h>
 #include <windows.h>
-//#include <urlmon.h>
 #include <vector>
 #include <dirent.h>
 #include <wininet.h>
@@ -98,6 +98,12 @@ void logsuc(const char* str) {
     setclr(15);
 }
 
+void logwrn(const char* str) {
+    setclr(14);
+    cerr << str << endl;
+    setclr(15);
+}
+
 void logerr(const char* str) {
     setclr(4);
     cerr << str << endl;
@@ -137,9 +143,13 @@ int main() {
     if(isFileExists(steamiconDir)) {
         cout << "Found Steam icon dir in " << steamiconDir << endl;
     }else {
-        logerr("E Cannot find steam icon dir, exiting...");
-        system("pause");
-        exit(0);
+        logwrn("W Cannot find steam icon dir, manual input>_");
+        getline(cin, steamiconDir);
+        if(!isFileExists(steamiconDir)) {
+            logerr("E Path not exist. Exiting...");
+            system("pause");
+            exit(0);
+        }
     }
 
     if(isFileExists(desktopDir)) {
