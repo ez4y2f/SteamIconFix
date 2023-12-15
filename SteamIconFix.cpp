@@ -126,10 +126,13 @@ int main() {
     char *userProfileVar;
     if(!(progFilesVar = getenv("programfiles(x86)"))) {
         logerr("E Cannot find programfiles(x86), exiting...");
+        system("pause");
         exit(0);
     }
     if(!(userProfileVar = getenv("UserProfile"))) {
         logerr("E Cannot find UserProfile, exiting...");
+        system("pause");
+        exit(0);
     }
 
     string progFilesStr;
