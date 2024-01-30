@@ -142,7 +142,6 @@ int main() {
     string steamiconDir = progFilesStr + R"(\Steam\steam\games)";
     string desktopDir = userProfileStr + "\\Desktop";
 
-
     if(isFileExists(steamiconDir)) {
         cout << "Found Steam icon dir in " << steamiconDir << endl;
     }else {
@@ -158,9 +157,13 @@ int main() {
     if(isFileExists(desktopDir)) {
         cout << "Fount Desktop in " << desktopDir << endl;
     }else {
-        logerr("E Cannot find desktop dir, exiting...");
-        system("pause");
-        exit(0);
+        logwrn("W Cannot find desktop dir, manual input>_");
+        getline(cin, desktopDir);
+        if(!isFileExists(desktopDir)) {
+            logerr("E Path not exist. Exiting...");
+            system("pause");
+            exit(0);
+        }
     }
 
     cout << endl;
