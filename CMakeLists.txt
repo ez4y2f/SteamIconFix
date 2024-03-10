@@ -9,7 +9,10 @@ set(CURL_LIBRARY "-lcurl")
 set(CURL_INCLUDE_DIR "./include")
 
 add_executable(SteamIconFix
-        SteamIconFix.cpp)
+        main.cpp
+        src/code/steamIconFix.cpp
+        src/header/steamIconFix.h
+)
 
 find_package(CURL REQUIRED)
 target_link_libraries(SteamIconFix ${CURL_LIBRARIES})
