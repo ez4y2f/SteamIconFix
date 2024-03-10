@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="SteamIconFix"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="D:/Code/Cpp/SteamIconFix/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SteamIconFix">
+				<Option output="D:/Code/Cpp/SteamIconFix/cmake-build-release/SteamIconFix.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Code/Cpp/SteamIconFix/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Code/Cpp/SteamIconFix/./include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 SteamIconFix"/>
+					<CompileFile command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SteamIconFix/fast">
+				<Option output="D:/Code/Cpp/SteamIconFix/cmake-build-release/SteamIconFix.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="D:/Code/Cpp/SteamIconFix/cmake-build-release"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="D:/Code/Cpp/SteamIconFix/./include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/backward"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../include"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/include-fixed"/>
+					<Add directory="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/../lib/gcc/x86_64-w64-mingw32/13.1.0/../../../../x86_64-w64-mingw32/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 SteamIconFix/fast"/>
+					<CompileFile command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="D:/Code/Cpp/SteamIconFix/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="D:/Code/Cpp/SteamIconFix/cmake-build-release"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="D:/JetBrains/ToolBox/apps/CLion/ch-0/233.14475.31/bin/mingw/bin/mingw32-make.exe -f &quot;D:/Code/Cpp/SteamIconFix/cmake-build-release/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="D:/Code/Cpp/SteamIconFix/lib/steamIconFix.cpp">
+			<Option target="SteamIconFix"/>
+		</Unit>
+		<Unit filename="D:/Code/Cpp/SteamIconFix/lib/steamIconFix.h">
+			<Option target="SteamIconFix"/>
+		</Unit>
+		<Unit filename="D:/Code/Cpp/SteamIconFix/main.cpp">
+			<Option target="SteamIconFix"/>
+		</Unit>
+		<Unit filename="D:/Code/Cpp/SteamIconFix/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

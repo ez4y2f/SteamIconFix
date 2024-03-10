@@ -1,0 +1,3 @@
+D:\JetBrains\ToolBox\apps\CLion\ch-0\233.14475.31\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\SteamIconFix.dir/objects.a
+D:\JetBrains\ToolBox\apps\CLion\ch-0\233.14475.31\bin\mingw\bin\ar.exe qc CMakeFiles\SteamIconFix.dir/objects.a @CMakeFiles\SteamIconFix.dir\objects1.rsp
+D:\JetBrains\ToolBox\apps\CLion\ch-0\233.14475.31\bin\mingw\bin\g++.exe -g -static -Wl,--whole-archive CMakeFiles\SteamIconFix.dir/objects.a -Wl,--no-whole-archive -o SteamIconFix.exe -Wl,--out-implib,libSteamIconFix.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\SteamIconFix.dir\linkLibs.rsp

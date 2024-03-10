@@ -1,0 +1,13 @@
+D:\JetBrains\ToolBox\apps\CLion\ch-0\233.14475.31\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - MinGW Makefiles" -S D:\Code\Cpp\SteamIconFix -B D:\Code\Cpp\SteamIconFix\cmake-build-release
+CMake Deprecation Warning:
+  Support for "Extra Generators" like
+
+    CodeBlocks
+
+  is deprecated and will be removed from a future version of CMake.  IDEs may
+  use the cmake-file-api(7) to view CMake-generated project build trees.
+
+
+-- Configuring done (0.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: D:/Code/Cpp/SteamIconFix/cmake-build-release
