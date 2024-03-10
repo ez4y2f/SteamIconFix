@@ -1,1 +1,0 @@
-  -LD:/Code/Cpp/SteamIconFix/./lib  -lcurl -lwsock32 -lws2_32 -lwldap32 -lwinmm -lcrypt32 -lnormaliz -lbcrypt -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 

@@ -1,4 +1,0 @@
-ToolSet: 11.0 w64 (local)@D:\JetBrains\ToolBox\apps\CLion\ch-0\233.14475.31\bin\mingw
-Options: 
-
-Options:
