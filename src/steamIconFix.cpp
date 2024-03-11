@@ -24,8 +24,11 @@ bool getDirFiles(const string& path, vector<string> &files,char folderFlag) {
     while((ptr = readdir(dir)) != nullptr) {
         if(strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) continue; // cur or pat dir
         if (strcmp(ptr->d_name+ strlen(ptr->d_name)-4,".url")) continue;//not url file
-        bool result=none_of(files.begin(),files.end(),[&ptr](const string& fileName){
-            return fileName.substr(0,fileName.length()-4).compare(0,strlen(ptr->d_name)-4,ptr->d_name);
+        string name=ptr->d_name;
+        name=name.substr(0,name.length()-4);
+        bool result=none_of(files.begin(),files.end(),[&name](const string& fileName){
+            cout<<fileName.substr(0,fileName.length()-4)<<endl;
+            return !name.compare(fileName.substr(0,fileName.length()-4));
         });
         if (result) continue;
         const string fullDir=path+'\\'+ptr->d_name;
