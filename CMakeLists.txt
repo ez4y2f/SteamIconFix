@@ -12,6 +12,7 @@ add_executable(SteamIconFix
         src/main.cpp
         src/steamIconFix.cpp
         src/steamIconFix.h
+        include/lnkReader.h
 )
 
 find_package(CURL REQUIRED)

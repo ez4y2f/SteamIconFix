@@ -2,6 +2,7 @@
 // Created by -Zinc- on 2024/3/10.
 //
 
+#include <algorithm>
 #include "steamIconFix.h"
 
 BOOL isFileExists(const string& path) {
@@ -23,9 +24,15 @@ bool getDirFiles(const string& path, vector<string> &files,char folderFlag) {
     while((ptr = readdir(dir)) != nullptr) {
         if(strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) continue; // cur or pat dir
         if (strcmp(ptr->d_name+ strlen(ptr->d_name)-4,".url")) continue;//not url file
-        stat(ptr->d_name, &s);
+        bool result=any_of(files.begin(),files.end(),[&ptr](const string& dir){
+            return dir.substr(0,dir.length()-4).compare(0,strlen(ptr->d_name)-4,ptr->d_name)==0;
+        });
+        if (result) continue;
+        const string fullDir=path+'\\'+ptr->d_name;
+
+        stat(fullDir.c_str(), &s);
         if(s.st_mode & S_IFDIR) continue;
-        cout<<ptr->d_name<<endl;
+        ptr->d_name[strlen(ptr->d_name)-4]=folderFlag;
         files.emplace_back(ptr->d_name);
     }
 
@@ -108,15 +115,15 @@ bool getDesktopDir(string &path) {
     if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Desktop,0, nullptr,&wstrPath))){
         return false;
     }
-    *path = wstring2string(wstrPath);
+    path = wstring2string(wstrPath);
     return true;
 }
-bool getStartMenuProgramDir(string &path) {
+bool getSteamStartMenuDir(string &path) {
     WCHAR* wstrPath= nullptr;
     if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Programs,0, nullptr,&wstrPath))){
         return false;
     }
-    *path = wstring2string(wstrPath)+"\\Steam";
+    path = wstring2string(wstrPath)+"\\Steam";
     return true;
 }
 string wstring2string(wstring wstr) {

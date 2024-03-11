@@ -29,6 +29,6 @@ void logsuc(const char* str);
 void logwrn(const char* str);
 void logerr(const char* str);
 bool getDesktopDir(string &path);
-bool getStartMenuProgramDir(string &path);
+bool getSteamStartMenuDir(string &path);
 string wstring2string(wstring wstr);
 #endif //STEAMICONFIX_STEAMICONFIX_H
