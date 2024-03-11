@@ -5,7 +5,7 @@
 #include <winreg.h>
 #include <tchar.h>
 #define CURL_STATICLIB
-#include "src/header/steamIconFix.h"
+#include "steamIconFix.h"
 // for windows only :(
 
 using namespace std;
@@ -40,7 +40,9 @@ int main() {
     string userProfileStr;
     userProfileStr.assign(userProfileVar, strlen(userProfileVar));
     string steamiconDir = progFilesStr + R"(\Steam\steam\games)";
-    string desktopDir = userProfileStr + "\\Desktop";
+    string desktopDir= nullptr;
+    getDesktopDir(desktopDir);
+
     if(isFileExists(steamiconDir)) {
         cout << "Found Steam icon dir in " << steamiconDir << endl;
     }else {
@@ -69,7 +71,7 @@ int main() {
 
     vector<string> files;
     string temp;
-    getDirFiles(desktopDir, files);
+    getDirFiles(desktopDir, files, 'd');
     char urlbuf[256]; // vars in ini(.url)
     char iconbuf[MAX_PATH];
 
@@ -77,7 +79,7 @@ int main() {
 
     for(const auto & file : files) {
         if(file.find_last_of('.') > file.length()) continue;
-        if(strcmp(file.substr(file.find_last_of('.') + 1, file.length() - 1).c_str(), "url") != 0) continue; // not an url file
+        //if(strcmp(file.substr(file.find_last_of('.') + 1, file.length() - 1).c_str(), "url") != 0) continue; // not an url file
         GetPrivateProfileString(_T("InternetShortcut"), _T("URL"), nullptr, urlbuf, sizeof(urlbuf), (desktopDir + "\\" + file).c_str());
         GetPrivateProfileString(_T("InternetShortcut"),  _T("IconFile"), nullptr, iconbuf, sizeof(iconbuf), (desktopDir + "\\" + file).c_str());
         temp = urlbuf;

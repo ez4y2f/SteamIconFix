@@ -2,14 +2,15 @@
 // Created by -Zinc- on 2024/3/10.
 //
 
-#include "../header/steamIconFix.h"
+#include "steamIconFix.h"
+#include "tools.h"
 BOOL isFileExists(const string& path) {
     DWORD dwAttr = GetFileAttributes((LPCSTR)path.c_str());
     if (dwAttr == 0xFFFFFFFF) return false;
     return true;
 }
 
-bool getDirFiles(const string& path, vector<string> &files) {
+bool getDirFiles(const string& path, vector<string> &files,char folderFlag) {
     DIR *dir;
     dirent *ptr;
     struct stat s{};
@@ -21,9 +22,10 @@ bool getDirFiles(const string& path, vector<string> &files) {
 
     while((ptr = readdir(dir)) != nullptr) {
         if(strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) continue; // cur or pat dir
+        if (strcmp(ptr->d_name+ strlen(ptr->d_name)-4,".url")) continue;//not url file
         stat(ptr->d_name, &s);
         if(s.st_mode & S_IFDIR) continue;
-
+        cout<<ptr->d_name<<endl;
         files.emplace_back(ptr->d_name);
     }
 
@@ -100,3 +102,21 @@ void logerr(const char* str) {
     cerr << str << endl;
     setclr(15);
 }
+
+bool getDesktopDir(string &path) {
+    WCHAR* wstrPath= nullptr;
+    if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Desktop,0, nullptr,&wstrPath))){
+        return false;
+    }
+    *path = wstring2string(wstrPath);
+    return true;
+}
+bool getStartMenuProgramDir(string &path) {
+    WCHAR* wstrPath= nullptr;
+    if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Programs,0, nullptr,&wstrPath))){
+        return false;
+    }
+    *path = wstring2string(wstrPath)+"\\Steam";
+    return true;
+}
+
