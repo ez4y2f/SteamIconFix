@@ -12,8 +12,6 @@ add_executable(SteamIconFix
         src/main.cpp
         src/steamIconFix.cpp
         src/steamIconFix.h
-        src/tools.h
-        src/tools.cpp
 )
 
 find_package(CURL REQUIRED)
