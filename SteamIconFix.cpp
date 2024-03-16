@@ -6,6 +6,8 @@
 #include <wininet.h>
 #include <tchar.h>
 #include <sys/stat.h>
+#include <Shlobj.h>
+#include<algorithm>
 #define CURL_STATICLIB
 #include "include/curl.h"
 // for windows only :(
@@ -110,6 +112,22 @@ void logerr(const char* str) {
     setclr(15);
 }
 
+// thanks @Zinc-in
+string wstring2string(const wstring& wstr) {
+    string result;
+    int len = WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS,
+                                  wstr.c_str(), wstr.size(),
+                                  nullptr, 0, nullptr, nullptr);
+    char *buffer = new char[len + 1];
+    WideCharToMultiByte(CP_ACP, WC_NO_BEST_FIT_CHARS,
+                        wstr.c_str(), wstr.size(),
+                        buffer, len, nullptr, nullptr);
+    buffer[len] = '\0';
+    result.append(buffer);
+    delete[] buffer;
+    return result;
+}
+
 int main() {
     setclr(11);
     cout << "========Steam Icon Fix by ez4y2f========" << endl;
@@ -123,24 +141,29 @@ int main() {
     cout << "Current running in dir " << dir << endl;
 
     char *progFilesVar;
-    char *userProfileVar;
     if(!(progFilesVar = getenv("programfiles(x86)"))) {
         logerr("E Cannot find programfiles(x86), exiting...");
         system("pause");
         exit(0);
     }
-    if(!(userProfileVar = getenv("UserProfile"))) {
-        logerr("E Cannot find UserProfile, exiting...");
+
+    WCHAR *desktopVar;
+    if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Desktop, 0, nullptr, &desktopVar))) {
+        logerr("E Cannot find Desktop, exiting...");
         system("pause");
         exit(0);
     }
 
+    WCHAR *startMenuVar;
+    if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Programs, 0, nullptr, &startMenuVar))) {
+        logwrn("W Cannot find Start menu, skipped");
+    }
+
     string progFilesStr;
     progFilesStr.assign(progFilesVar, strlen(progFilesVar));
-    string userProfileStr;
-    userProfileStr.assign(userProfileVar, strlen(userProfileVar));
+    string desktopDir = wstring2string(desktopVar);
+    string startMenuDir = wstring2string(startMenuVar) + R"(\Steam)";
     string steamiconDir = progFilesStr + R"(\Steam\steam\games)";
-    string desktopDir = userProfileStr + "\\Desktop";
 
     if(isFileExists(steamiconDir)) {
         cout << "Found Steam icon dir in " << steamiconDir << endl;
@@ -155,7 +178,7 @@ int main() {
     }
 
     if(isFileExists(desktopDir)) {
-        cout << "Fount Desktop in " << desktopDir << endl;
+        cout << "Found Desktop in " << desktopDir << endl;
     }else {
         logwrn("W Cannot find desktop dir, manual input>_");
         getline(cin, desktopDir);
@@ -169,8 +192,18 @@ int main() {
     cout << endl;
 
     vector<string> files;
+    vector<string> downloadedAppid; // program find .url files in both desktop and start menu, that makes it no repeating
+
     string temp;
     getDirFiles(desktopDir, files);
+
+    if(isFileExists(startMenuDir)) {
+        cout << "Found Steam Start Menu Shortcut in " << startMenuDir << endl;
+        getDirFiles(startMenuDir, files);
+    }else {
+        logwrn("W Cannot find StartMenu Dir, skipping...");
+    }
+
     char urlbuf[256]; // vars in ini(.url)
     char iconbuf[MAX_PATH];
 
@@ -186,7 +219,11 @@ int main() {
         if(strcmp(temp.substr(0, temp.find(':')).c_str(), "steam") != 0) continue; // not a steam shortcut
         temp = temp.substr(temp.find_last_of('/') + 1, temp.length() - 1); // appid;
         cout << "Find Steam Shortcut " << file << " with appid " << temp << endl;
-
+        if(find(downloadedAppid.begin(), downloadedAppid.end(), temp) != downloadedAppid.end()) {
+            cout << "Have dealt with before, skip..." << endl;
+            continue;
+        }
+        downloadedAppid.emplace_back(temp);
 
         string iconfile = iconbuf;
         if(iconfile.find_last_of('\\') > iconfile.length()) {
@@ -194,6 +231,12 @@ int main() {
             continue;
         }
         string dwnurl = iconurl + temp + '/' + iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length() - 1);
+
+        if(iconfile.find(steamiconDir) == string::npos){
+            cout << "Needn't re-download, skip..." << endl;
+            continue; // icon file is not "clienticon"
+        }
+
         cout << "- try to download icon from " << dwnurl << " to " << iconfile << endl;
         int res = downloadFile(dwnurl, iconfile);
         if(res) {
