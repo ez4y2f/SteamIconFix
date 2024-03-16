@@ -20,5 +20,3 @@ Run it, and it will fix all icons on desktop.
 - _E download failed. Check your network!_ Curl error code will display.(Maybe Turn off your vpn?)
 ### Warning
 The http is unsecure while https leads to a error in my network environment.
-### Thanks
-lnkReader https://github.com/lanpurz/LnkReader
