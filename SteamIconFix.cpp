@@ -7,7 +7,8 @@
 #include <tchar.h>
 #include <sys/stat.h>
 #include <Shlobj.h>
-#include<algorithm>
+#include <algorithm>
+#include <format>
 #define CURL_STATICLIB
 #include "include/curl.h"
 // for windows only :(
@@ -90,26 +91,32 @@ void flushIcon() {
 }
 
 void setclr(unsigned short clr) {
-    HANDLE hCon =GetStdHandle(STD_OUTPUT_HANDLE); //获取缓冲区句柄
-    SetConsoleTextAttribute(hCon,clr); //设置文本及背景色
+    HANDLE hCon =GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hCon,clr);
+}
+
+void logui(const char* str) {
+    setclr(FOREGROUND_BLUE);
+    cout << str << endl;
+    setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void logsuc(const char* str) {
-    setclr(10);
+    setclr(FOREGROUND_GREEN);
     cout << str << endl;
-    setclr(15);
+    setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void logwrn(const char* str) {
-    setclr(14);
+    setclr(FOREGROUND_RED | FOREGROUND_GREEN);
     cerr << str << endl;
-    setclr(15);
+    setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void logerr(const char* str) {
-    setclr(4);
+    setclr(FOREGROUND_RED);
     cerr << str << endl;
-    setclr(15);
+    setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 // thanks @Zinc-in
@@ -189,7 +196,25 @@ int main() {
         }
     }
 
+    string cdnChoose;
+
     cout << endl;
+    logui("==Type what CDN u wanna use==");
+    logui("0 -> akamai");
+    logui("1 -> cloudflare");
+
+    while ((cdnChoose != "0") && (cdnChoose != "1")) {
+        cout << "CDN[enter for 0]";
+        getline(cin, cdnChoose);
+        if(cdnChoose.empty()) {
+            cdnChoose = "0";
+            break;
+        }
+        if((cdnChoose != "0") && (cdnChoose != "1")) cout << "Input invalid." << endl;
+    }
+
+    cdnChoose = cdnChoose == "0" ? "akamai" : "cloudflare";
+    logui(vformat("Current using CDN {}", make_format_args(cdnChoose)).c_str());
 
     vector<string> files;
     vector<string> downloadedAppid; // program find .url files in both desktop and start menu, that makes it no repeating
@@ -198,7 +223,7 @@ int main() {
     getDirFiles(desktopDir, files);
 
     if(isFileExists(startMenuDir)) {
-        cout << "Found Steam Start Menu Shortcut in " << startMenuDir << endl;
+        cout << endl << "Found Steam Start Menu Shortcut in " << startMenuDir << endl;
         getDirFiles(startMenuDir, files);
     }else {
         logwrn("W Cannot find StartMenu Dir, skipping...");
@@ -207,7 +232,8 @@ int main() {
     char urlbuf[256]; // vars in ini(.url)
     char iconbuf[MAX_PATH];
 
-    string iconurl = "http://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/";
+    string iconurl = "http://cdn.{}.steamstatic.com/steamcommunity/public/images/apps/";
+    iconurl = vformat(iconurl, make_format_args(cdnChoose));
 
     for(const auto & file : files) {
         if(file.find_last_of('.') > file.length()) continue;
@@ -232,7 +258,7 @@ int main() {
         }
         string dwnurl = iconurl + temp + '/' + iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length() - 1);
 
-        if(iconfile.find(steamiconDir) == string::npos){
+        if(iconfile.find(steamiconDir) == string::npos || strcmp(iconfile.substr(iconfile.find_last_of('.') + 1, iconfile.length() - 1).c_str(), "ico") != 0){
             cout << "Needn't re-download, skip..." << endl;
             continue; // icon file is not "clienticon"
         }
@@ -240,6 +266,8 @@ int main() {
         cout << "- try to download icon from " << dwnurl << " to " << iconfile << endl;
         int res = downloadFile(dwnurl, iconfile);
         if(res) {
+            if(res == 3) logwrn("Skipped, error 3, needn't redownload");
+
             logerr(("E download failed. Check your network! Error " + to_string(res)).c_str());
             logerr("E deleting downloaded files...");
             system(("del \"" + iconfile + "\"").c_str());
