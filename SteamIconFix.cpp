@@ -1,14 +1,13 @@
 #include <iostream>
 #include <winsock2.h>
 #include <windows.h>
-#include <vector>
 #include <dirent.h>
 #include <wininet.h>
 #include <tchar.h>
 #include <sys/stat.h>
 #include <Shlobj.h>
-#include <algorithm>
 #include <format>
+#include <unordered_map>
 #define CURL_STATICLIB
 #include "include/curl.h"
 // for windows only :(
@@ -18,28 +17,6 @@ using namespace std;
 BOOL isFileExists(const string& path) {
     DWORD dwAttr = GetFileAttributes((LPCSTR)path.c_str());
     if (dwAttr == 0xFFFFFFFF) return false;
-    return true;
-}
-
-bool getDirFiles(const string& path, vector<string> &files) {
-    DIR *dir;
-    dirent *ptr;
-    struct stat s{};
-
-    if((dir = opendir(path.c_str())) == nullptr) {
-        cerr << "E[GetDirFiles] Failed open dir." << endl;
-        return false;
-    }
-
-    while((ptr = readdir(dir)) != nullptr) {
-        if(strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) continue; // cur or pat dir
-        stat(ptr->d_name, &s);
-        if(s.st_mode & S_IFDIR) continue;
-
-        files.emplace_back(ptr->d_name);
-    }
-
-    closedir(dir);
     return true;
 }
 
@@ -119,6 +96,43 @@ void logerr(const char* str) {
     setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
+bool getDirUrlFiles(const string& path, unordered_map<string,string> &files) {
+    DIR *dir;
+    dirent *ptr;
+    struct stat s{};
+    char urlbuf[256]; // vars in ini(.url)
+    char iconbuf[MAX_PATH];
+    string url;
+    string iconfile;
+
+    if((dir = opendir(path.c_str())) == nullptr) {
+        cerr << "E[GetDirFiles] Failed open dir." << endl;
+        return false;
+    }
+
+    while((ptr = readdir(dir)) != nullptr) {
+        if(strcmp(ptr->d_name, ".") == 0 || strcmp(ptr->d_name, "..") == 0) continue; // cur or pat dir
+        const string fullDir = path+'\\'+ptr->d_name;
+        stat(fullDir.c_str(), &s);//use full dir is true
+        if(s.st_mode & S_IFDIR) continue;
+        if (strcmp(ptr->d_name+strlen(ptr->d_name) - 4,".url")!=0) continue;//not url file
+        GetPrivateProfileString(_T("InternetShortcut"), _T("URL"), nullptr, urlbuf, sizeof(urlbuf), fullDir.c_str());
+        GetPrivateProfileString(_T("InternetShortcut"),  _T("IconFile"), nullptr, iconbuf, sizeof(iconbuf), fullDir.c_str());
+        url=urlbuf;
+        if(url.find(':') > url.length() || url.find_last_of('/') > url.length()) continue;
+        if(strcmp(url.substr(0, url.find(':')).c_str(), "steam") != 0) continue; // not a steam shortcut
+        iconfile = iconbuf;
+        if(iconfile.find_last_of('\\') > iconfile.length()) {
+            logerr("E invalid shortcut");
+            continue;
+        }
+        files[url.substr(url.find_last_of('/') + 1, url.length())]=iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length());
+        cout << "Find Steam Shortcut " << string(ptr->d_name).substr(0, strlen(ptr->d_name)-4) << " with appid " << files.begin()->first << endl;
+    }
+    closedir(dir);
+    return true;
+}
+
 // thanks @Zinc-in
 string wstring2string(const wstring& wstr) {
     string result;
@@ -147,12 +161,18 @@ int main() {
     dir = dir.substr(dir.find_last_of('\\') + 1, dir.length() - 1);
     cout << "Current running in dir " << dir << endl;
 
-    char *progFilesVar;
-    if(!(progFilesVar = getenv("programfiles(x86)"))) {
-        logerr("E Cannot find programfiles(x86), exiting...");
+    string progFilesVar;
+    DWORD size=MAX_PATH;
+    auto* buffer = new WCHAR[MAX_PATH];
+    if(!SUCCEEDED(RegGetValueW(HKEY_LOCAL_MACHINE,L"SOFTWARE\\WOW6432Node\\Valve\\Steam",L"InstallPath",RRF_RT_ANY, nullptr,(PVOID)buffer,&size))){
+        logerr("E Steam is not installed, exiting...");
         system("pause");
         exit(0);
     }
+
+    progFilesVar=wstring2string(buffer);
+    delete [] buffer;
+
 
     WCHAR *desktopVar;
     if(!SUCCEEDED(SHGetKnownFolderPath(FOLDERID_Desktop, 0, nullptr, &desktopVar))) {
@@ -166,11 +186,9 @@ int main() {
         logwrn("W Cannot find Start menu, skipped");
     }
 
-    string progFilesStr;
-    progFilesStr.assign(progFilesVar, strlen(progFilesVar));
     string desktopDir = wstring2string(desktopVar);
     string startMenuDir = wstring2string(startMenuVar) + R"(\Steam)";
-    string steamiconDir = progFilesStr + R"(\Steam\steam\games)";
+    string steamiconDir = progFilesVar + R"(\steam\games)";
 
     if(isFileExists(steamiconDir)) {
         cout << "Found Steam icon dir in " << steamiconDir << endl;
@@ -195,6 +213,11 @@ int main() {
             exit(0);
         }
     }
+    if(isFileExists(startMenuDir)) {
+        cout << "Found Steam Start Menu Shortcut in " << startMenuDir << endl;
+    }else {
+        logwrn("W Cannot find StartMenu Dir, skipping...");
+    }
 
     string cdnChoose;
 
@@ -212,65 +235,36 @@ int main() {
         }
         if((cdnChoose != "0") && (cdnChoose != "1")) cout << "Input invalid." << endl;
     }
+    cout << endl;
 
     cdnChoose = cdnChoose == "0" ? "akamai" : "cloudflare";
     logui(vformat("Current using CDN {}", make_format_args(cdnChoose)).c_str());
 
-    vector<string> files;
-    vector<string> downloadedAppid; // program find .url files in both desktop and start menu, that makes it no repeating
+    unordered_map<string,string> filesMap;//Only app ID and icon file name is useful,map could be a proper STL.
+    //Besides,it also ensures the app ID is unique.
 
-    string temp;
-    getDirFiles(desktopDir, files);
-
-    if(isFileExists(startMenuDir)) {
-        cout << endl << "Found Steam Start Menu Shortcut in " << startMenuDir << endl;
-        getDirFiles(startMenuDir, files);
-    }else {
-        logwrn("W Cannot find StartMenu Dir, skipping...");
-    }
-
-    char urlbuf[256]; // vars in ini(.url)
-    char iconbuf[MAX_PATH];
+    getDirUrlFiles(desktopDir, filesMap);
+    getDirUrlFiles(startMenuDir, filesMap);
 
     string iconurl = "http://cdn.{}.steamstatic.com/steamcommunity/public/images/apps/";
     iconurl = vformat(iconurl, make_format_args(cdnChoose));
 
-    for(const auto & file : files) {
-        if(file.find_last_of('.') > file.length()) continue;
-        if(strcmp(file.substr(file.find_last_of('.') + 1, file.length() - 1).c_str(), "url") != 0) continue; // not an url file
-        GetPrivateProfileString(_T("InternetShortcut"), _T("URL"), nullptr, urlbuf, sizeof(urlbuf), (desktopDir + "\\" + file).c_str());
-        GetPrivateProfileString(_T("InternetShortcut"),  _T("IconFile"), nullptr, iconbuf, sizeof(iconbuf), (desktopDir + "\\" + file).c_str());
-        temp = urlbuf;
-        if(temp.find(':') > temp.length() || temp.find_last_of('/') > temp.length()) continue;
-        if(strcmp(temp.substr(0, temp.find(':')).c_str(), "steam") != 0) continue; // not a steam shortcut
-        temp = temp.substr(temp.find_last_of('/') + 1, temp.length() - 1); // appid;
-        cout << "Find Steam Shortcut " << file << " with appid " << temp << endl;
-        if(find(downloadedAppid.begin(), downloadedAppid.end(), temp) != downloadedAppid.end()) {
-            cout << "Have dealt with before, skip..." << endl;
-            continue;
-        }
-        downloadedAppid.emplace_back(temp);
+    for(const auto & file : filesMap) {
+        string dwnurl = iconurl + file.first + '/' + file.second;
+//
+//        if(iconfile.find(steamiconDir) == string::npos || strcmp(iconfile.substr(iconfile.find_last_of('.') + 1, iconfile.length() - 1).c_str(), "ico") != 0){
+//            cout << "Needn't re-download, skip..." << endl;
+//            continue; // icon file is not "clienticon"
+//        }//no need
 
-        string iconfile = iconbuf;
-        if(iconfile.find_last_of('\\') > iconfile.length()) {
-            logerr("E invalid shortcut");
-            continue;
-        }
-        string dwnurl = iconurl + temp + '/' + iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length() - 1);
-
-        if(iconfile.find(steamiconDir) == string::npos || strcmp(iconfile.substr(iconfile.find_last_of('.') + 1, iconfile.length() - 1).c_str(), "ico") != 0){
-            cout << "Needn't re-download, skip..." << endl;
-            continue; // icon file is not "clienticon"
-        }
-
-        cout << "- try to download icon from " << dwnurl << " to " << iconfile << endl;
-        int res = downloadFile(dwnurl, iconfile);
+        cout << "- try to download icon from " << dwnurl << " to " <<steamiconDir+"\\"+ file.second << endl;
+        int res = downloadFile(dwnurl, steamiconDir+"\\"+ file.second);
         if(res) {
-            if(res == 3) logwrn("Skipped, error 3, needn't redownload");
+            if(res == 3) logwrn("Skipped, error 3, needn't re-download");
 
             logerr(("E download failed. Check your network! Error " + to_string(res)).c_str());
             logerr("E deleting downloaded files...");
-            system(("del \"" + iconfile + "\"").c_str());
+            system(("del \"" + file.second + "\"").c_str());
             system("pause");
             exit(0);
         }
