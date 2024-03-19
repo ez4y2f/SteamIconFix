@@ -126,8 +126,10 @@ bool getDirUrlFiles(const string& path, unordered_map<string,string> &files) {
             logerr("E invalid shortcut");
             continue;
         }
-        files[url.substr(url.find_last_of('/') + 1, url.length())]=iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length());
-        cout << "Find Steam Shortcut " << string(ptr->d_name).substr(0, strlen(ptr->d_name)-4) << " with appid " << files.begin()->first << endl;
+        url=url.substr(url.find_last_of('/') + 1, url.length());
+        iconfile=iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length());
+        if (files.insert(pair<string,string>(url,iconfile)).second)
+            cout << "Find Steam Shortcut " << ptr->d_name << " with appid " << files.begin()->first << endl;
     }
     closedir(dir);
     return true;
