@@ -155,11 +155,12 @@ int main() {
     setclr(6);
     cout << ">_D3bug the w0r1d.    Visit https://y2f.xyz for more information." << endl;
     setclr(15);
+    /*
     char dirarr[MAX_PATH];
     getcwd(dirarr, MAX_PATH);
     string dir = dirarr;
     dir = dir.substr(dir.find_last_of('\\') + 1, dir.length() - 1);
-    cout << "Current running in dir " << dir << endl;
+    cout << "Current running in dir " << dir << endl;*///no need
 
     string progFilesVar;
     DWORD size=MAX_PATH;

@@ -13,8 +13,8 @@
 Run it, and it will fix all icons on desktop.
 ### Errors
 - _E[GetDirFiles] Failed open dir._ No enough Premissions(it seems impossible).
-- _E Cannot find programfiles(x86), exiting..._ Can't find environment variables.
-- _E Cannot find UserProfile, exiting..._ The same.
+- _E Steam is not installed, exiting..._ Please check your steam installation,or click this [link](https://store.steampowered.com/about/) to download steam client.
+- _E Cannot find Desktop, exiting..._ Run regedit and find this location:HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders,right click the right window and create string value named Desktop,paste your desktop location in the data textbox.
 - _W Cannot find steam icon dir, manual input>_ Drag your steam icon dir in {SteamInstallPath}/steam/games.
 - _W Cannot find desktop dir, manual input>_ Drag your desktop dir into it
 - _E invalid shortcut_ It seems broken, try delete the shortcut and re-create it.
