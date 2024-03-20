@@ -96,7 +96,7 @@ void logerr(const char* str) {
     setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
-bool getDirUrlFiles(const string& path, unordered_map<string,string> &files) {
+bool getDirUrlFiles(const string& path, unordered_map<string, string> &files) {
     DIR *dir;
     dirent *ptr;
     struct stat s{};
@@ -129,7 +129,7 @@ bool getDirUrlFiles(const string& path, unordered_map<string,string> &files) {
         url=url.substr(url.find_last_of('/') + 1, url.length());
         iconfile=iconfile.substr(iconfile.find_last_of('\\') + 1, iconfile.length());
         if (files.insert(pair<string,string>(url,iconfile)).second)
-            cout << "Find Steam Shortcut " << ptr->d_name << " with appid " << files.begin()->first << endl;
+            cout << "Find Steam Shortcut " << ptr->d_name << " with appid " << url << endl;
     }
     closedir(dir);
     return true;
