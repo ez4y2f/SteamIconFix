@@ -293,23 +293,6 @@ int main() {
                 exit(0);
 
         }
-        if (res) {
-            if (res == 3) {
-                logwrn("Skipped, error 3, URL error");
-                continue;
-            }
-            if (res == 404) {
-                logwrn("Skipped, error 404, File Not Found");
-                continue;
-            }
-            if (res > 500) logwrn(("Error" + to_string(res) + ", Server Error,please change cdn").c_str());
-
-            logerr(("E download failed. Check your network! Error " + to_string(res)).c_str());
-            logerr("E deleting downloaded files...");
-            system(("del \"" + iconfile + "\"").c_str());
-            system("pause");
-            exit(0);
-        } else logsuc("- Successful Fixed.");
     }
 
     cout << "Finish Fixing, Flushing icon cache..." << endl;
