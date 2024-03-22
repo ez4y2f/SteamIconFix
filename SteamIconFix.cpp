@@ -287,11 +287,13 @@ int main() {
                 break;
             default:
                 logerr(("E download failed. Check your network! Error " + to_string(res)).c_str());
-                logerr("E deleting downloaded files...");
-                system(("del \"" + iconfile + "\"").c_str());
-                system("pause");
-                exit(0);
 
+        }
+        if (res){
+            logerr("E deleting downloaded files...");
+            system(("del \"" + iconfile + "\"").c_str());
+            system("pause");
+            exit(0);
         }
     }
 
