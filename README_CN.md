@@ -23,5 +23,5 @@
 - normaliz
 - bcrypt
 - @inory121 Github 手动选择桌面路径
-- @Zinc-in Github 在开始菜单查找
+- @Zinc-in Github 修复bug
 - @在下叶板 Bilibili 帮我找出好多bug（（
