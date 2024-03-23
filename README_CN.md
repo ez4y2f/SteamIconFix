@@ -3,6 +3,7 @@
 ### 食用方法
 直接运行，选择CDN时可以直接回车，自动修复桌面和开始菜单的快捷方式
 ### 常见问题
+- _Download Failed. Check your network! Error 23_ 图标文件可能被占用了，重启电脑试试
 - _E[GetDirFiles] Failed open dir._ 试试管理员方式运行？
 - _E Steam is not installed, exiting..._ 检查你的Steam安装目录，或者点击[下载链接](https://store.steampowered.com/about/)重新下载Steam
 - _E Cannot find Desktop, exiting..._ 打开注册表编辑器，找到如下目录：HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders，在其中添加名称为Desktop的字符串，数据为你的桌面路径
