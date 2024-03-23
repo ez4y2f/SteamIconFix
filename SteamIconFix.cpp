@@ -151,7 +151,7 @@ string wstring2string(const wstring &wstr) {
 
 int main() {
     setclr(11);
-    cout << "========Steam Icon Fix by ez4y2f========" << endl;
+    cout << "========Steam Icon Fix========" << endl;
     setclr(6);
     cout << ">_D3bug the w0r1d.    Visit https://y2f.xyz for more information." << endl;
     setclr(15);
@@ -272,6 +272,9 @@ int main() {
 
         cout << "- try to download icon from " << dwnurl << " to " << steamiconDir + "\\" + iconfile << endl;
         int res = downloadFile(dwnurl, steamiconDir + "\\" + iconfile);
+
+        bool terminateFlag = false; // terminate for error not-to-skip
+
         switch (res) {
             case 0:
                 logsuc("- Successful Fixed.");
@@ -284,11 +287,13 @@ int main() {
                 break;
             case 500 ...599:
                 logwrn(("Error" + to_string(res) + ", Server Error,please change cdn").c_str());
+                terminateFlag = true;
                 break;
             default:
                 logerr(("E download failed. Check your network! Error " + to_string(res)).c_str());
+                terminateFlag = true;
         }
-        if (res){
+        if (terminateFlag){
             logerr("E deleting downloaded files...");
             system(("del \"" + iconfile + "\"").c_str());
             system("pause");
