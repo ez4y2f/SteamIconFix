@@ -92,13 +92,13 @@ void logsuc(const char *str) {
 
 void logwrn(const char *str) {
     setclr(FOREGROUND_RED | FOREGROUND_GREEN);
-    cerr << str << endl;
+    cout << str << endl;
     setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
 void logerr(const char *str) {
     setclr(FOREGROUND_RED);
-    cerr << str << endl;
+    cout << str << endl;
     setclr(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }
 
@@ -150,6 +150,9 @@ string wstring2string(const wstring &wstr) {
 }
 
 int main() {
+
+    ios::sync_with_stdio(false);
+
     setclr(11);
     cout << "========Steam Icon Fix========" << endl;
     setclr(6);
@@ -295,7 +298,7 @@ int main() {
         }
         if (terminateFlag){
             logerr("E deleting downloaded files...");
-            system(("del \"" + iconfile + "\"").c_str());
+            system(("del \"" + steamiconDir + "\\" + iconfile + "\"").c_str());
             system("pause");
             exit(0);
         }
