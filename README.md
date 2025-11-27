@@ -3,6 +3,7 @@
 [中文版本](README_CN.md)
 ### Requirements
 - libcurl
+- jsoncpp
 - winsock32
 - wldap32
 - winmm
@@ -10,7 +11,7 @@
 - normaliz
 - bcrypt
 ### Usage
-Run it, and it will fix all icons on desktop.
+Run it, and it will fix all icons found in Desktop&your library.
 ### Errors
 - _Download Failed. Check your network! Error 23_ icon file may in use, try to reboot your machine.
 - _E[GetDirFiles] Failed open dir._ No enough Premissions(it seems impossible).
@@ -21,4 +22,4 @@ Run it, and it will fix all icons on desktop.
 - _E invalid shortcut_ It seems broken, try delete the shortcut and re-create it.
 - _E download failed. Check your network!_ Curl error code will display.(Maybe Turn off your vpn?)
 ### Warning
-The http is unsecure while https leads to a error in my network environment.
+It used a third-party API to get clientIcon from appId.
