@@ -1,7 +1,7 @@
 # Steam Icon Fix
 ##### 修复Steam空白的桌面图标
 ### 食用方法
-直接运行，选择CDN时可以直接回车，自动修复桌面和开始菜单的快捷方式
+直接运行，选择CDN时可以直接回车，自动修复桌面和开始菜单的快捷方式和你库里的游戏
 ### 常见问题
 - _Download Failed. Check your network! Error 23_ 图标文件可能被占用了，重启电脑试试
 - _E[GetDirFiles] Failed open dir._ 试试管理员方式运行？
@@ -13,7 +13,7 @@
 - _E download failed. Check your network!_ 可以把错误码发给我，试着关掉vpn加速器反代，或者换个网络环境
 - _下载下来的图标还是0KB空白的_ 在选择CDN时候换个其他的，关掉反代，或者换个网络环境
 ### 警告
-采用http下载图标，可能不安全
+采用了第三方api获取clienticon，可能不安全
 ### 感谢
 - libcurl
 - winsock32
@@ -22,6 +22,7 @@
 - crypt32
 - normaliz
 - bcrypt
+- jsoncpp
 - @inory121 Github 手动选择桌面路径
 - @Zinc-in Github 修复bug
 - @在下叶板 Bilibili 帮我找出好多bug（（
