@@ -30,6 +30,7 @@ project(SteamIconFix)
 set(CMAKE_CXX_STANDARD 23)
 
 find_package(CURL REQUIRED)
+find_package(jsoncpp CONFIG REQUIRED)
 
 add_executable(SteamIconFix
         SteamIconFix.cpp)
@@ -40,3 +41,4 @@ if (MINGW)
 endif()
 
 target_link_libraries(SteamIconFix PRIVATE CURL::libcurl)
+target_link_libraries(SteamIconFix PRIVATE JsonCpp::JsonCpp)
